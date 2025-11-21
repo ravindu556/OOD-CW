@@ -1,16 +1,16 @@
 package teammate;
 
 public class Participant {
-    private String id;                  // P001, P002...
+    private String id;
     private String name;
     private String email;
     private String preferredGame;
-    private int skillLevel;             // 1-10
-    private String preferredRole;       // Strategist, Attacker, etc.
-    private int personalityScore;       // 50-100
-    private String personalityType;     // Leader, Balanced, Thinker
+    private int skillLevel;
+    private String preferredRole;
+    private int personalityScore;
+    private String personalityType;
 
-    // Constructor for loading from CSV
+
     public Participant(String id, String name, String email, String game,
                             int skillLevel, String role, int score, String type) {
         this.id = id;
