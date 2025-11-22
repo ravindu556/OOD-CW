@@ -78,6 +78,31 @@ public class ParticipantMode {
 
 
 
+    private static String readName() {
+        while (true) {
+            System.out.print("Enter your full name (letters and spaces only): ");
+            String input = sc.nextLine().trim();
+            if (input.isEmpty()) {
+                System.out.println("Name cannot be empty!");
+                continue;
+            }
+            if (input.matches("[a-zA-Z\\s]+")) {
+                return input;
+            }
+            System.out.println("Invalid name! Use only letters and spaces.");
+        }
+    }
+
+    private static String readEmail() {
+        while (true) {
+            System.out.print("Enter your email (must contain @ and . ): ");
+            String input = sc.nextLine().trim();
+            if (input.contains("@") && input.contains(".") ) {
+                return input;
+            }
+            System.out.println("Invalid email! Must contain @ and a dot )");
+        }
+    }
 }
 
 
