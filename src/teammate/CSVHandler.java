@@ -68,7 +68,27 @@ import java.util.*;
             }
 
         }
-
+        public static void saveFormedTeams(List<Team> teams) {
+            try (PrintWriter w = new PrintWriter("formed_teams.csv")) {
+                w.println("TeamNumber,MemberID,Name,Email,Game,Role,Skill,Score,PersonalityType");
+                for (Team team : teams) {
+                    for (Participant p : team.getMembers()) {
+                        w.println(team.getTeamNumber() + "," +
+                                p.getId() + "," +
+                                p.getName() + "," +
+                                p.getEmail() + "," +
+                                p.getPreferredGame() + "," +
+                                p.getPreferredRole() + "," +
+                                p.getSkillLevel() + "," +
+                                p.getPersonalityScore() + "," +
+                                p.getPersonalityType());
+                    }
+                }
+                System.out.println("All teams saved to formed_teams.csv");
+            } catch (Exception e) {
+                System.out.println("Save failed: " + e.getMessage());
+            }
+        }
     }
 
 
