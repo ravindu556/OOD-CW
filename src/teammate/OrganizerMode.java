@@ -46,6 +46,24 @@ public class OrganizerMode {
         System.out.print("\nEnter your choice (1-7): ");
     }
 
+    private static void loadParticipantsFromCSV() {
+        System.out.print("\nEnter CSV filename (press Enter for 'participants_sample.csv'): ");
+        String input = sc.nextLine().trim();
+        String filename = input.isEmpty() ? "participants_sample.csv" : input;
+
+        File file = new File(filename);
+        if (!file.exists()) {
+            System.out.println("File not found: " + filename + "\n");
+            pause();
+            return;
+        }
+
+        participants = CSVHandler.loadParticipants(filename);
+        System.out.println("Successfully loaded " + participants.size() + " participants from " + filename + "\n");
+        pause();
+    }
+
+
     private static void viewAllParticipants() {
         if (participants.isEmpty()) {
             System.out.println("\nNo participants found.\n");
