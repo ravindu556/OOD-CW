@@ -10,8 +10,6 @@ public class OrganizerMode {
     private static int teamSize = 5;
 
     public static void run() {
-        participants = CSVHandler.loadParticipants();
-        System.out.println("\nLoaded " + participants.size() + " participants from participants.csv\n");
 
         while (true) {
             showMenu();
@@ -19,16 +17,17 @@ public class OrganizerMode {
             int choice = readInt();
 
             switch (choice) {
-                case 1 -> viewAllParticipants();
-                case 2 -> setTeamSize();
-                case 3 -> formBalancedTeams();
-                case 4 -> viewFormedTeams();
-                case 5 -> saveTeamsToCSV();
-                case 6 -> {
+                case 1 -> loadParticipantsFromCSV();
+                case 2 -> viewAllParticipants();
+                case 3 -> setTeamSize();
+                case 4 -> formBalancedTeams();
+                case 5 -> viewFormedTeams();
+                case 6 -> saveTeamsToCSV();
+                case 7 -> {
                     System.out.println("\nReturning to main menu...\n");
                     return;
                 }
-                default -> System.out.println("Invalid option. Please choose 1–6.");
+                default -> System.out.println("Invalid option. Please choose 1–7.");
             }
         }
     }
@@ -37,13 +36,14 @@ public class OrganizerMode {
         System.out.println("==================================================");
         System.out.println("           ORGANIZER MODE                         ");
         System.out.println("==================================================");
-        System.out.println("1. View All Participants");
-        System.out.println("2. Set Team Size (current: " + teamSize + ")");
-        System.out.println("3. Form Balanced Teams");
-        System.out.println("4. View Formed Teams");
-        System.out.println("5. Save Teams to formed_teams.csv");
-        System.out.println("6. Return to Main Menu");
-        System.out.print("\nEnter your choice (1-6): ");
+        System.out.println("1. Load Participants from CSV " );
+        System.out.println("2. View All Participants");
+        System.out.println("3. Set Team Size (current: " + teamSize + ")");
+        System.out.println("4. Form Balanced Teams");
+        System.out.println("5. View Formed Teams");
+        System.out.println("6. Save Teams to formed_teams.csv");
+        System.out.println("7. Return to Main Menu");
+        System.out.print("\nEnter your choice (1-7): ");
     }
 
     private static void viewAllParticipants() {
