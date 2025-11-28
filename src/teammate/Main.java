@@ -2,8 +2,6 @@ package teammate;
 
 import java.util.Scanner;
 
-
-
 public class Main {
     private static final Scanner scanner = new Scanner(System.in);
 
@@ -25,7 +23,7 @@ public class Main {
 
                  ParticipantMode.run();
             } else if (choice == 2) {
-                //System.out.println("\nOrganizer mode not ready yet – coming next!");
+
                 OrganizerMode.run();
             } else if (choice == 3) {
                 System.out.println("\nThank you for using TeamMate System. Goodbye!\n");
