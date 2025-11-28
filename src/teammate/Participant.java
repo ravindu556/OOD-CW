@@ -58,4 +58,6 @@ public class Participant {
         return id + "," + name + "," + email + "," + preferredGame + "," +
                 skillLevel + "," + preferredRole + "," + personalityScore + "," + personalityType;
     }
+
+
 }
