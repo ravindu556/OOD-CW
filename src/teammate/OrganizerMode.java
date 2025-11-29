@@ -1,7 +1,9 @@
 package teammate;
 
+import java.io.File;
 import java.util.*;
 import java.util.concurrent.*;
+
 public class OrganizerMode {
 
     private static final Scanner sc = new Scanner(System.in);
@@ -51,13 +53,11 @@ public class OrganizerMode {
         String input = sc.nextLine().trim();
         String filename = input.isEmpty() ? "participants_sample.csv" : input;
 
-        File file = new File(filename);
-        if (!file.exists()) {
-            System.out.println("File not found: " + filename + "\n");
+        if (!new File(filename).exists()) {
+            System.out.println("ERROR: File not found → " + filename + "\n");
             pause();
             return;
         }
-
         participants = CSVHandler.loadParticipants(filename);
         System.out.println("Successfully loaded " + participants.size() + " participants from " + filename + "\n");
         pause();
