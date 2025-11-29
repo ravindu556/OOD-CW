@@ -2,11 +2,14 @@ package teammate;
 
 import java.util.Scanner;
 import java.util.List;
+import java.util.logging.Logger;
 
 public class ParticipantMode {
+    private static final Logger logger = AppLogger.getLogger(ParticipantMode.class);
     private static final Scanner sc = new Scanner(System.in);
 
     public static void run() {
+        logger.info("Participant survey started.");
         System.out.println("\n=== Personality & Preference Survey ===\n");
 
         String name = readName();
@@ -20,6 +23,7 @@ public class ParticipantMode {
         int q5 = askQuestion("5. I like making quick decisions");
 
         int rawTotal = q1 + q2 + q3 + q4 + q5;
+        logger.info("Survey raw personality score: " + rawTotal);
 
         System.out.println("\nChoose your preferred game:");
         System.out.println("1. Chess     2. FIFA     3. CS:GO     4. DOTA 2     5. Valorant     6. Basketball");
@@ -28,6 +32,7 @@ public class ParticipantMode {
         int gameChoice = readIntInRange(1, 6);
         String game = games[gameChoice];
 
+        logger.info("Game selected: " + game);
 
         System.out.println("\nChoose your preferred role:");
         System.out.println("1. Strategist   2. Attacker   3. Defender   4. Supporter   5. Coordinator");
@@ -36,9 +41,11 @@ public class ParticipantMode {
         int roleChoice = readIntInRange(1, 5);
         String role = roles[roleChoice];
 
+        logger.info("Role selected: " + role);
+
         System.out.print("\nRate your skill level in " + game + " (1 = Beginner, 10 = Pro): ");
         int skill = readIntInRange(1, 10);
-
+        logger.info("Skill level selected: " + skill);
 
         List<Participant> all = CSVHandler.loadParticipants();
         String newId = CSVHandler.generateNextId(all);
@@ -48,6 +55,8 @@ public class ParticipantMode {
 
         all.add(newParticipant);
         CSVHandler.saveAllParticipants(all);
+
+        logger.info("Participant saved: " + newId + " (" + name + ")");
 
         System.out.println("\nSUCCESS!");
         System.out.println("You have been added as: " + newId);
@@ -71,6 +80,7 @@ public class ParticipantMode {
                 }
                 System.out.print("Please enter a number between " + min + " and " + max + ": ");
             } catch (NumberFormatException e) {
+                logger.warning("Invalid numeric input from user.");
                 System.out.print("Invalid input. Enter a number between " + min + " and " + max + ": ");
             }
         }
@@ -89,6 +99,7 @@ public class ParticipantMode {
             if (input.matches("[a-zA-Z\\s]+")) {
                 return input;
             }
+            logger.warning("Invalid name entry: " + input);
             System.out.println("Invalid name! Use only letters and spaces.");
         }
     }
@@ -97,9 +108,15 @@ public class ParticipantMode {
         while (true) {
             System.out.print("Enter your email (must contain @ and . ): ");
             String input = sc.nextLine().trim();
+            if (input.isEmpty()) {
+                System.out.println("Email cannot be empty!");
+                continue;
+            }
             if (input.contains("@") && input.contains(".") ) {
+                logger.info("Email entered: " + input);
                 return input;
             }
+            logger.warning("Invalid email entry: " + input);
             System.out.println("Invalid email! Must contain @ and a dot )");
         }
     }
