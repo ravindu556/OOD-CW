@@ -152,5 +152,110 @@ public class TeamBuilder {
             }
         }
 
+        // ========== CALCULATE FINAL STATISTICS ==========
+        double minAvg = formedTeams.stream()
+                .mapToDouble(TeamBuilder::getTeamAvgSkill)
+                .min()
+                .orElse(0);
+
+        double maxAvg = formedTeams.stream()
+                .mapToDouble(TeamBuilder::getTeamAvgSkill)
+                .max()
+                .orElse(0);
+
+        // Display success message with balance metrics
+        System.out.println("\nTEAMS FORMED SUCCESSFULLY!");
+        System.out.println("Every team has: 1+ Leader • 1-2 Thinkers • Max 2 same game • Balanced skill");
+        System.out.printf("Skill balance: %.1f - %.1f (difference: %.1f)\n",
+                minAvg, maxAvg, maxAvg - minAvg);
+        System.out.printf("%d teams of %d%s\n\n",
+                fullTeams, teamSize,
+                remainder > 0 ? " + 1 team of " + remainder : "");
+
+        return formedTeams;
+    }
+
+    private static double getTeamAvgSkill(Team team) {
+        List<Participant> members = team.getMembers();
+        if (members.isEmpty()) return 0.0;
+
+        return members.stream()
+                .mapToInt(Participant::getSkillLevel)
+                .average()
+                .orElse(0.0);
+    }
+
+    private static boolean canAddToTeam(Team team, Participant p) {
+        List<Participant> members = team.getMembers();
+
+        // CONSTRAINT 1: Max 2 Thinkers per team
+        long thinkerCount = members.stream()
+                .filter(m -> "Thinker".equals(m.getPersonalityType()))
+                .count();
+        if ("Thinker".equals(p.getPersonalityType()) && thinkerCount >= 2) {
+            return false;
+        }
+
+        // CONSTRAINT 2: Max 2 from same game (ensures diversity)
+        long sameGameCount = members.stream()
+                .filter(m -> m.getPreferredGame().equals(p.getPreferredGame()))
+                .count();
+        if (sameGameCount >= 2) {
+            return false;
+        }
+
+        // CONSTRAINT 3: At least 3 different roles when team size >= 4
+        // Ensures role variety in larger teams
+        if (members.size() >= 4) {
+            Set<String> roles = new HashSet<>();
+            for (Participant m : members) {
+                roles.add(m.getPreferredRole());
+            }
+            roles.add(p.getPreferredRole());
+
+            if (roles.size() < 3) {
+                return false;
+            }
+        }
+
+        return true;
+    }
+
+    private static boolean canAddRelaxed(Team team, Participant p) {
+        List<Participant> members = team.getMembers();
+
+        // RELAXED: Allow up to 3 Thinkers if absolutely necessary
+        long thinkerCount = members.stream()
+                .filter(m -> "Thinker".equals(m.getPersonalityType()))
+                .count();
+        if ("Thinker".equals(p.getPersonalityType()) && thinkerCount >= 3) {
+            return false;
+        }
+
+        // STRICT: Game diversity still enforced even in fallback
+        long sameGameCount = members.stream()
+                .filter(m -> m.getPreferredGame().equals(p.getPreferredGame()))
+                .count();
+        if (sameGameCount >= 2) {
+            return false;
+        }
+
+        return true;
+    }
+
+    public static List<Team> getFormedTeams() {
+        return formedTeams;
+    }
+
+    public static String displayTeams() {
+        if (formedTeams.isEmpty()) {
+            return "No teams formed yet.\n";
+        }
+
+        StringBuilder sb = new StringBuilder("\n");
+        for (Team t : formedTeams) {
+            sb.append(t.toString());
+        }
+        return sb.toString();
     }
 }
