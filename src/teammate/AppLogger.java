@@ -19,6 +19,10 @@ import java.io.IOException;
                     rootLogger.removeHandler(handler);
                 }
 
+
+
+                rootLogger.addHandler(fileHandler);
+
             } catch (IOException e) {
                 System.err.println("Failed to initialize logger: " + e.getMessage());
             }
