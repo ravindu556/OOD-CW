@@ -131,15 +131,34 @@ public class OrganizerMode {
     private static void setTeamSize() {
         logger.info("User is changing team size.");
 
-        System.out.print("\nEnter team size (3–6 recommended): ");
-        int size = readInt();
+        while (true) {
+            System.out.print("\nEnter team size  or press Enter for default (5): ");
+            String input = sc.nextLine().trim();
 
-        if (size >= 2 && size <= 10) {
-            teamSize = size;
-            logger.info("Team size updated to: " + teamSize);
-        } else {
-            logger.warning("Invalid team size entered: " + size + ". Reset to default.");
-            teamSize = 5;
+
+            if (input.isEmpty()) {
+                teamSize = 5;
+                logger.info("No input entered. Default team size applied: 5");
+                System.out.println("\n✔ Default team size applied: 5\n");
+                break;
+            }
+            try {
+                int size = Integer.parseInt(input);
+
+                if (size >0) {
+                    teamSize = size;
+                    logger.info("Team size updated to: " + teamSize);
+                    System.out.println("\n✔ Team size successfully updated to: " + teamSize + "\n");
+                    break;
+                } else {
+                    logger.warning("Invalid team size entered: " + size);
+                    System.out.println("\n⚠ Invalid range!  Try again.\n");
+                }
+
+            } catch (NumberFormatException e) {
+                logger.warning("Invalid non-numeric input: " + input);
+                System.out.println("\n⚠ Invalid input! Please enter a NUMBER.\n");
+            }
         }
     }
 
@@ -199,6 +218,7 @@ public class OrganizerMode {
         }
 
         logger.info("Saving formed teams to CSV...");
+        System.out.println("\nSaving formed teams to CSV!\n");
         CSVHandler.saveFormedTeams(formedTeams);
         pause();
     }
