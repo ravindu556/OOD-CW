@@ -5,23 +5,24 @@ import java.util.*;
 import java.util.concurrent.*;
 import java.util.logging.Logger;
 
-
-
 public class OrganizerMode {
 
     private static final Logger logger = AppLogger.getLogger(OrganizerMode.class);
 
     private static final Scanner sc = new Scanner(System.in);
-    private static List<Participant> participants;
+    private static List<Participant> participants = new ArrayList<>();
     private static List<Team> formedTeams = new ArrayList<>();
     private static int teamSize = 5;
 
     public static void run() {
 
+        logger.info("Organizer Mode started.");
+
         while (true) {
             showMenu();
-
             int choice = readInt();
+
+            logger.info("User selected menu option: " + choice);
 
             switch (choice) {
                 case 1 -> loadParticipantsFromCSV();
@@ -31,10 +32,14 @@ public class OrganizerMode {
                 case 5 -> viewFormedTeams();
                 case 6 -> saveTeamsToCSV();
                 case 7 -> {
+                    logger.info("User exited Organizer Mode.");
                     System.out.println("\nReturning to main menu...\n");
                     return;
                 }
-                default -> System.out.println("Invalid option. Please choose 1–7.");
+                default -> {
+                    logger.warning("Invalid menu selection: " + choice);
+                    System.out.println("Invalid option. Please choose 1–7.");
+                }
             }
         }
     }
@@ -55,6 +60,8 @@ public class OrganizerMode {
 
     private static void loadParticipantsFromCSV() {
 
+        logger.info("Attempting to load participants from CSV...");
+
         System.out.println(" • Press Enter → load default file: participants_sample.csv");
         System.out.println(" • Type filename ");
         System.out.println(" • Enter full path ");
@@ -65,43 +72,51 @@ public class OrganizerMode {
         File file = new File(filePath);
 
         if (!file.exists()) {
+            logger.severe("CSV NOT FOUND: " + file.getAbsolutePath());
             System.out.println("\nERROR: File not found!");
-            System.out.println("       Path: " + file.getAbsolutePath() + "\n");
             pause();
             return;
         }
 
+        logger.info("CSV found. Loading file: " + filePath);
+
         ExecutorService executor = Executors.newSingleThreadExecutor();
         Future<List<Participant>> future = executor.submit(() ->
-                CSVHandler.loadParticipants(filePath)  // This is "processing survey data"
+                CSVHandler.loadParticipants(filePath)
         );
 
         try {
-            participants = future.get(15, TimeUnit.SECONDS);  // 15 sec max for large files
+            participants = future.get(15, TimeUnit.SECONDS);
+            logger.info("Successfully loaded " + participants.size() + " participants.");
             System.out.println("SUCCESS!");
-            System.out.println(" Loaded " + participants.size() + " participants");
-            System.out.println(" File: " + file.getAbsolutePath() + "\n");
+            System.out.println("   Loaded " + participants.size() + " participants");
         } catch (TimeoutException e) {
-            System.out.println("ERROR: Loading took too long (timeout after 15 seconds)\n");
-            participants = new ArrayList<>();
+            logger.severe("CSV loading timed out.");
+            System.out.println("ERROR: Loading took too long.\n");
         } catch (Exception e) {
-            System.out.println("ERROR during file loading: " + e.getMessage() + "\n");
-            participants = new ArrayList<>();
+            logger.severe("Error loading CSV: " + e.getMessage());
+            System.out.println("ERROR during loading.\n");
         } finally {
             executor.shutdown();
         }
 
         pause();
     }
+
+
     private static void viewAllParticipants() {
+        logger.info("User chose to view all participants.");
+
         if (participants.isEmpty()) {
+            logger.warning("No participants to display.");
             System.out.println("\nNo participants found.\n");
         } else {
+            logger.info("Displaying " + participants.size() + " participants.");
             System.out.println("\n=== ALL PARTICIPANTS (" + participants.size() + ") ===\n");
             for (Participant p : participants) {
                 System.out.printf("P%03d | %-20s | %-10s | %-10s | Skill: %2d | Score: %3d | %s%n",
                         Integer.parseInt(p.getId().substring(1)),
-                        p.getName().length() > 20 ? p.getName().substring(0, 17) + "..." : p.getName(),
+                        p.getName(),
                         p.getPreferredGame(),
                         p.getPreferredRole(),
                         p.getSkillLevel(),
@@ -112,27 +127,34 @@ public class OrganizerMode {
         pause();
     }
 
+
     private static void setTeamSize() {
+        logger.info("User is changing team size.");
+
         System.out.print("\nEnter team size (3–6 recommended): ");
         int size = readInt();
+
         if (size >= 2 && size <= 10) {
             teamSize = size;
-            System.out.println("Team size updated to " + teamSize + "\n");
+            logger.info("Team size updated to: " + teamSize);
         } else {
-            System.out.println("Invalid size. Using default team size of 5.\n");
+            logger.warning("Invalid team size entered: " + size + ". Reset to default.");
             teamSize = 5;
         }
     }
 
 
     private static void formBalancedTeams() {
+
+        logger.info("Attempting to form balanced teams using threading...");
+
         if (participants.size() < teamSize) {
-            System.out.println("Not enough participants for teams of size " + teamSize + "!\n");
+            logger.warning("Not enough participants to form a team. Required: " + teamSize +
+                    ", Available: " + participants.size());
+            System.out.println("Not enough participants!\n");
             pause();
             return;
         }
-
-        System.out.println("\nForming balanced teams using multi-threading algorithm...\n");
 
         ExecutorService executor = Executors.newSingleThreadExecutor();
         Future<List<Team>> future = executor.submit(() ->
@@ -141,11 +163,12 @@ public class OrganizerMode {
 
         try {
             formedTeams = future.get(10, TimeUnit.SECONDS);
-            System.out.println("Successfully formed " + formedTeams.size() + " balanced team(s)!\n");
+            logger.info("Teams successfully formed. Total teams: " + formedTeams.size());
+            System.out.println("Teams formed successfully!\n");
         } catch (TimeoutException e) {
-            System.out.println("Team formation timed out!\n");
+            logger.severe("Team formation timed out.");
         } catch (Exception e) {
-            System.out.println("Error during team formation: " + e.getMessage() + "\n");
+            logger.severe("Error during team formation: " + e.getMessage());
         } finally {
             executor.shutdown();
         }
@@ -153,20 +176,29 @@ public class OrganizerMode {
         pause();
     }
 
+
     private static void viewFormedTeams() {
+        logger.info("User requested to view formed teams.");
+
         if (formedTeams.isEmpty()) {
-            System.out.println("\nNo teams have been formed yet. Please select option 3 first.\n");
+            logger.warning("No teams formed yet.");
+            System.out.println("\nNo teams yet.\n");
         } else {
+            logger.info("Displaying " + formedTeams.size() + " teams.");
             System.out.println(TeamBuilder.displayTeams());
         }
         pause();
     }
 
+
     private static void saveTeamsToCSV() {
         if (formedTeams.isEmpty()) {
+            logger.warning("Attempted to save teams before any were formed.");
             System.out.println("\nNo teams to save!\n");
             return;
         }
+
+        logger.info("Saving formed teams to CSV...");
         CSVHandler.saveFormedTeams(formedTeams);
         pause();
     }
@@ -177,7 +209,8 @@ public class OrganizerMode {
             try {
                 return Integer.parseInt(sc.nextLine().trim());
             } catch (NumberFormatException e) {
-                System.out.print("Please enter a valid number: ");
+                logger.warning("Invalid number entered by user.");
+                System.out.print("Enter a valid number: ");
             }
         }
     }
