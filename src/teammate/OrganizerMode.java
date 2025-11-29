@@ -3,8 +3,13 @@ package teammate;
 import java.io.File;
 import java.util.*;
 import java.util.concurrent.*;
+import java.util.logging.Logger;
+
+
 
 public class OrganizerMode {
+
+    private static final Logger logger = AppLogger.getLogger(OrganizerMode.class);
 
     private static final Scanner sc = new Scanner(System.in);
     private static List<Participant> participants;
@@ -53,8 +58,6 @@ public class OrganizerMode {
         System.out.println(" • Press Enter → load default file: participants_sample.csv");
         System.out.println(" • Type filename ");
         System.out.println(" • Enter full path ");
-
-
         System.out.print("\nEnter file path or press Enter for default: ");
         String input = sc.nextLine().trim();
         String filePath = input.isEmpty() ? "participants_sample.csv" : input;
@@ -68,14 +71,28 @@ public class OrganizerMode {
             return;
         }
 
-        participants = CSVHandler.loadParticipants(filePath);
+        ExecutorService executor = Executors.newSingleThreadExecutor();
+        Future<List<Participant>> future = executor.submit(() ->
+                CSVHandler.loadParticipants(filePath)  // This is "processing survey data"
+        );
 
-        System.out.println("\nSUCCESS!");
-        System.out.println("   Loaded " + participants.size() + " participants");
-        System.out.println("   File: " + file.getAbsolutePath() + "\n");
+        try {
+            participants = future.get(15, TimeUnit.SECONDS);  // 15 sec max for large files
+            System.out.println("SUCCESS!");
+            System.out.println(" Loaded " + participants.size() + " participants");
+            System.out.println(" File: " + file.getAbsolutePath() + "\n");
+        } catch (TimeoutException e) {
+            System.out.println("ERROR: Loading took too long (timeout after 15 seconds)\n");
+            participants = new ArrayList<>();
+        } catch (Exception e) {
+            System.out.println("ERROR during file loading: " + e.getMessage() + "\n");
+            participants = new ArrayList<>();
+        } finally {
+            executor.shutdown();
+        }
+
         pause();
     }
-
     private static void viewAllParticipants() {
         if (participants.isEmpty()) {
             System.out.println("\nNo participants found.\n");
