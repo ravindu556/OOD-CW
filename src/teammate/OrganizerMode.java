@@ -49,20 +49,32 @@ public class OrganizerMode {
     }
 
     private static void loadParticipantsFromCSV() {
-        System.out.print("\nEnter CSV filename (press Enter for 'participants_sample.csv'): ");
-        String input = sc.nextLine().trim();
-        String filename = input.isEmpty() ? "participants_sample.csv" : input;
 
-        if (!new File(filename).exists()) {
-            System.out.println("ERROR: File not found → " + filename + "\n");
+        System.out.println(" • Press Enter → load default file: participants_sample.csv");
+        System.out.println(" • Type filename ");
+        System.out.println(" • Enter full path ");
+
+
+        System.out.print("\nEnter file path or press Enter for default: ");
+        String input = sc.nextLine().trim();
+        String filePath = input.isEmpty() ? "participants_sample.csv" : input;
+
+        File file = new File(filePath);
+
+        if (!file.exists()) {
+            System.out.println("\nERROR: File not found!");
+            System.out.println("       Path: " + file.getAbsolutePath() + "\n");
             pause();
             return;
         }
-        participants = CSVHandler.loadParticipants(filename);
-        System.out.println("Successfully loaded " + participants.size() + " participants from " + filename + "\n");
+
+        participants = CSVHandler.loadParticipants(filePath);
+
+        System.out.println("\nSUCCESS!");
+        System.out.println("   Loaded " + participants.size() + " participants");
+        System.out.println("   File: " + file.getAbsolutePath() + "\n");
         pause();
     }
-
 
     private static void viewAllParticipants() {
         if (participants.isEmpty()) {
@@ -95,18 +107,6 @@ public class OrganizerMode {
         }
     }
 
-//    private static void formBalancedTeams() {
-//        if (participants.size() < teamSize) {
-//            System.out.println("Not enough participants for teams of size " + teamSize + "!\n");
-//            pause();
-//            return;
-//        }
-//
-//        System.out.println("\nForming balanced teams using multi-threading algorithm...\n");
-//        formedTeams = TeamBuilder.buildTeams(new ArrayList<>(participants), teamSize);
-//        System.out.println("Successfully formed " + formedTeams.size() + " balanced team(s)!\n");
-//        pause();
-//    }
 
     private static void formBalancedTeams() {
         if (participants.size() < teamSize) {
