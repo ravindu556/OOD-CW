@@ -1,6 +1,9 @@
 package teammate;
 
+import java.util.logging.Logger;
+
 public class Participant {
+    private static final Logger logger = AppLogger.getLogger(Participant.class);
     private String id;
     private String name;
     private String email;
@@ -9,6 +12,7 @@ public class Participant {
     private String preferredRole;
     private int personalityScore;
     private String personalityType;
+
 
 
     public Participant(String id, String name, String email, String game,
@@ -21,6 +25,7 @@ public class Participant {
         this.preferredRole = role;
         this.personalityScore = score;
         this.personalityType = type;
+        logger.fine("Participant loaded from CSV: "+id +" ("+type +")");
     }
 
     public Participant(String id, String name, String email, String game,
@@ -33,6 +38,10 @@ public class Participant {
         this.preferredRole = role;
         this.personalityScore = rawTotal5Q * 4;
         this.personalityType = classify(rawTotal5Q * 4);
+
+        logger.info("New participant created: " + name +
+                " | Score: " + this.personalityScore +
+                " | Type: " + personalityType);
     }
     private String classify(int score) {
         if (score >= 90) return "Leader";
