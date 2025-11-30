@@ -1,8 +1,10 @@
 package teammate;
 
 import java.util.Scanner;
+import java.util.logging.Logger;
 
 public class Main {
+    private static final Logger logger = AppLogger.getLogger(Main.class);
     private static final Scanner scanner = new Scanner(System.in);
 
     public static void main(String[] args) {
@@ -19,6 +21,7 @@ public class Main {
 
 
             int choice = readInt();
+            logger.info("User selected main menu option: " + choice);
             if (choice == 1) {
 
                  ParticipantMode.run();
@@ -26,9 +29,11 @@ public class Main {
 
                 OrganizerMode.run();
             } else if (choice == 3) {
+                logger.info("Application terminated by user.");
                 System.out.println("\nThank you for using TeamMate System. Goodbye!\n");
                 break;
             } else {
+                logger.warning("Invalid menu choice: " + choice);
                 System.out.println("Invalid choice. Please enter 1, 2 or 3.\n");
             }
         }
@@ -39,6 +44,7 @@ public class Main {
                 try {
                     return Integer.parseInt(scanner.nextLine().trim());
                 } catch (NumberFormatException e) {
+                    logger.warning("Invalid number entered.");
                     System.out.print("Please enter a valid number: ");
                 }
             }
