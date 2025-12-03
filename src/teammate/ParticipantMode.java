@@ -4,11 +4,19 @@ import java.util.Scanner;
 import java.util.List;
 import java.util.logging.Logger;
 
-public class ParticipantMode {
-    private static final Logger logger = AppLogger.getLogger(ParticipantMode.class);
-    private static final Scanner sc = new Scanner(System.in);
+public class ParticipantMode implements MenuHandler {
 
-    public static void run() {
+    private static final Logger logger = AppLogger.getLogger(ParticipantMode.class);
+    private  final Scanner sc = new Scanner(System.in);
+
+    @Override
+    public void showMenu() {
+        System.out.println("\n===== PARTICIPANT MENU =====");
+        System.out.println("→ This mode automatically starts the survey.");
+        System.out.println("(Press Enter to continue)");
+    }
+    @Override
+    public  void run() {
         logger.info("Participant survey started.");
         System.out.println("\n=== Personality & Preference Survey ===\n");
 
@@ -66,12 +74,12 @@ public class ParticipantMode {
         sc.nextLine();
     }
 
-    private static int askQuestion(String question) {
+    private  int askQuestion(String question) {
         System.out.print(question + ": ");
         return readIntInRange(1, 5);
     }
 
-    private static int readIntInRange(int min, int max) {
+    private  int readIntInRange(int min, int max) {
         while (true) {
             try {
                 int value = Integer.parseInt(sc.nextLine().trim());
@@ -88,7 +96,7 @@ public class ParticipantMode {
 
 
 
-    private static String readName() {
+    private  String readName() {
         while (true) {
             System.out.print("Enter your full name (letters and spaces only): ");
             String input = sc.nextLine().trim();
@@ -104,7 +112,7 @@ public class ParticipantMode {
         }
     }
 
-    private static String readEmail() {
+    private  String readEmail() {
         while (true) {
             System.out.print("Enter your email (must contain @ and . ): ");
             String input = sc.nextLine().trim();
@@ -121,20 +129,6 @@ public class ParticipantMode {
         }
     }
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 

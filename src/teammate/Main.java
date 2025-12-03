@@ -14,8 +14,8 @@ public class Main {
 
         while (true) {
             System.out.println("Who are you?");
-            System.out.println("1. Participant (complete personality survey only)");
-            System.out.println("2. Organizer (manage teams and form groups)");
+            System.out.println("1. Participant ");
+            System.out.println("2. Organizer");
             System.out.println("3. Exit");
             System.out.print("\nEnter choice (1-3): ");
 
@@ -23,12 +23,16 @@ public class Main {
             int choice = readInt();
             logger.info("User selected main menu option: " + choice);
             if (choice == 1) {
+                MenuHandler user = new ParticipantMode();
 
-                 ParticipantMode.run();
+                user.run();
             } else if (choice == 2) {
+                MenuHandler user = new OrganizerMode();
 
-                OrganizerMode.run();
-            } else if (choice == 3) {
+                user.run();
+
+
+        } else if (choice == 3) {
                 logger.info("Application terminated by user.");
                 System.out.println("\nThank you for using TeamMate System. Goodbye!\n");
                 break;
@@ -51,6 +55,5 @@ public class Main {
         }
 
     }
-
 
 

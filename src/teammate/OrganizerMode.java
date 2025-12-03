@@ -5,17 +5,18 @@ import java.util.*;
 import java.util.concurrent.*;
 import java.util.logging.Logger;
 
-public class OrganizerMode {
+public class OrganizerMode implements MenuHandler {
+
 
     private static final Logger logger = AppLogger.getLogger(OrganizerMode.class);
 
-    private static final Scanner sc = new Scanner(System.in);
-    private static List<Participant> participants = new ArrayList<>();
-    private static List<Team> formedTeams = new ArrayList<>();
-    private static int teamSize = 5;
+    private  final Scanner sc = new Scanner(System.in);
+    private  List<Participant> participants = new ArrayList<>();
+    private  List<Team> formedTeams = new ArrayList<>();
+    private  int teamSize = 5;
 
-    public static void run() {
-
+    @Override
+    public  void run() {
         logger.info("Organizer Mode started.");
 
         while (true) {
@@ -44,7 +45,8 @@ public class OrganizerMode {
         }
     }
 
-    private static void showMenu() {
+    @Override
+    public  void showMenu() {
         System.out.println("==================================================");
         System.out.println("           ORGANIZER MODE                         ");
         System.out.println("==================================================");
@@ -58,7 +60,7 @@ public class OrganizerMode {
         System.out.print("\nEnter your choice (1-7): ");
     }
 
-    private static void loadParticipantsFromCSV() {
+    private  void loadParticipantsFromCSV() {
 
         logger.info("Attempting to load participants from CSV...");
 
@@ -104,7 +106,7 @@ public class OrganizerMode {
     }
 
 
-    private static void viewAllParticipants() {
+    private  void viewAllParticipants() {
         logger.info("User chose to view all participants.");
 
         if (participants.isEmpty()) {
@@ -128,7 +130,7 @@ public class OrganizerMode {
     }
 
 
-    private static void setTeamSize() {
+    private  void setTeamSize() {
         logger.info("User is changing team size.");
 
         while (true) {
@@ -161,56 +163,123 @@ public class OrganizerMode {
             }
         }
     }
-
-
-    private static void formBalancedTeams() {
-
+    private  void formBalancedTeams() {
         logger.info("Attempting to form balanced teams using threading...");
 
-        if (participants.size() < teamSize) {
-            logger.warning("Not enough participants to form a team. Required: " + teamSize +
-                    ", Available: " + participants.size());
-            System.out.println("Not enough participants!\n");
+        if (participants.isEmpty()) {
+            System.out.println("No participants loaded!\n");
             pause();
             return;
         }
 
+        if (participants.size() < teamSize) {
+            System.out.println("Not enough participants! Need at least " + teamSize + "\n");
+            pause();
+            return;
+        }
+
+        System.out.println("Starting team formation with " + participants.size() + " participants...");
+        System.out.print("Press Enter to continue or type 'cancel' to abort: ");
+        if (sc.nextLine().trim().equalsIgnoreCase("cancel")) {
+            System.out.println("Cancelled.\n");
+            pause();
+            return;
+        }
+
+        long start = System.currentTimeMillis();
+
         ExecutorService executor = Executors.newSingleThreadExecutor();
-        Future<List<Team>> future = executor.submit(() ->
-                TeamBuilder.buildTeams(new ArrayList<>(participants), teamSize)
-        );
+        Future<List<Team>> future = executor.submit(() -> {
+            // Create new builder with a DEFENSIVE COPY for thread safety
+            TeamBuilder builder = new TeamBuilder(new ArrayList<>(participants), teamSize);
+
+            // This entire call, which includes internal threading, runs in the background
+            return builder.buildTeams();
+        });
 
         try {
-            formedTeams = future.get(10, TimeUnit.SECONDS);
+            // Main thread waits for the result (Blocking call, but keeps the menu loop clean)
+            formedTeams.clear();
+            formedTeams.addAll(future.get(60, TimeUnit.SECONDS)); // Wait up to 60 seconds
+
+            long time = System.currentTimeMillis() - start;
             logger.info("Teams successfully formed. Total teams: " + formedTeams.size());
-            System.out.println("Teams formed successfully!\n");
+            System.out.printf("\nTEAM FORMATION COMPLETE in %.2f seconds!\n", time / 1000.0);
+            System.out.println("Successfully formed " + formedTeams.size() + " balanced teams!\n");
+
         } catch (TimeoutException e) {
             logger.severe("Team formation timed out.");
+            System.out.println("\nERROR: Team formation timed out after 60 seconds.\n");
         } catch (Exception e) {
             logger.severe("Error during team formation: " + e.getMessage());
+            e.printStackTrace();
+            System.out.println("\nERROR during team formation.\n");
         } finally {
+            // Must shut down the executor service
             executor.shutdown();
         }
 
         pause();
     }
+//    private static void formBalancedTeams() {
+//
+//        logger.info("Attempting to form balanced teams using threading...");
+//
+//        if (participants.size() < teamSize) {
+//            logger.warning("Not enough participants to form a team. Required: " + teamSize +
+//                    ", Available: " + participants.size());
+//            System.out.println("Not enough participants!\n");
+//            pause();
+//            return;
+//        }
+//
+//        ExecutorService executor = Executors.newSingleThreadExecutor();
+//        Future<List<Team>> future = executor.submit(() ->
+//                TeamBuilder.buildTeams(new ArrayList<>(participants), teamSize)
+//        );
+//
+//        try {
+//            formedTeams = future.get(10, TimeUnit.SECONDS);
+//            logger.info("Teams successfully formed. Total teams: " + formedTeams.size());
+//            System.out.println("Teams formed successfully!\n");
+//        } catch (TimeoutException e) {
+//            logger.severe("Team formation timed out.");
+//        } catch (Exception e) {
+//            logger.severe("Error during team formation: " + e.getMessage());
+//        } finally {
+//            executor.shutdown();
+//        }
+//
+//        pause();
+//    }
 
 
-    private static void viewFormedTeams() {
-        logger.info("User requested to view formed teams.");
+private  void viewFormedTeams() {
+    logger.info("User requested to view formed teams.");
 
-        if (formedTeams.isEmpty()) {
-            logger.warning("No teams formed yet.");
-            System.out.println("\nNo teams yet.\n");
-        } else {
-            logger.info("Displaying " + formedTeams.size() + " teams.");
-            System.out.println(TeamBuilder.displayTeams());
-        }
+    if (formedTeams.isEmpty()) {
+        logger.warning("No teams formed yet.");
+        System.out.println("\nNo teams formed yet. Please form teams first!\n");
         pause();
+        return;
     }
 
+    System.out.println("\n" + "═".repeat(80));
+    System.out.println("                FORMED TEAMS (" + formedTeams.size() + " teams)");
+    System.out.println("═".repeat(80));
 
-    private static void saveTeamsToCSV() {
+    Collections.sort(formedTeams, Comparator.comparingInt(Team::getTeamNumber));
+
+    // Create a temporary TeamBuilder just to use displayTeams() or directly print
+    for (Team team : formedTeams) {
+        System.out.println(team);  // Team has PERFECT toString()
+    }
+
+    System.out.println("═".repeat(80) + "\n");
+    pause();
+}
+
+    private  void saveTeamsToCSV() {
         if (formedTeams.isEmpty()) {
             logger.warning("Attempted to save teams before any were formed.");
             System.out.println("\nNo teams to save!\n");
@@ -224,7 +293,7 @@ public class OrganizerMode {
     }
 
 
-    private static int readInt() {
+    private  int readInt() {
         while (true) {
             try {
                 return Integer.parseInt(sc.nextLine().trim());
@@ -235,8 +304,9 @@ public class OrganizerMode {
         }
     }
 
-    private static void pause() {
+    private  void pause() {
         System.out.println("Press Enter to continue...");
         sc.nextLine();
     }
 }
+
