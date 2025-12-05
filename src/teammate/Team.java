@@ -53,7 +53,7 @@ public class Team {
         return String.format("TEAM %-2d │ Avg Skill: %4.1f │ Personality: %s",
                 teamNumber, avgSkill, personality.trim());
     }
-    // Inside Team.java:
+
     public double getAverageSkill() {
         if (members.isEmpty()) return 0.0;
         return members.stream()
@@ -68,11 +68,13 @@ public class Team {
         sb.append(getSummary()).append("\n");
         sb.append("--------------------------------------------------------------------------------\n");
         for (Participant p : members) {
-            sb.append(String.format(" • %-20s | %-12s | %-12s | Skill: %2d | Score: %3d | %s%n",
+            sb.append(String.format(" • %-20s : %-12s : %-12s : Skill: %2d : Score: %3d : %s%n",
                     p.getName(), p.getPreferredGame(), p.getPreferredRole(),
                     p.getSkillLevel(), p.getPersonalityScore(), p.getPersonalityType()));
         }
         sb.append("\n");
         return sb.toString();
     }
+
+
 }

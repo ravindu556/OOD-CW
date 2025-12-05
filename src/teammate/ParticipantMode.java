@@ -69,7 +69,7 @@ public class ParticipantMode implements MenuHandler {
         System.out.println("\nSUCCESS!");
         System.out.println("You have been added as: " + newId);
         System.out.println("Personality Score: " + (rawTotal * 4) + " → " + newParticipant.getPersonalityType());
-        System.out.println("Your data has been saved to participants.csv\n");
+        System.out.println("Your data has been saved to participants_sample.csv\n");
         System.out.println("Press Enter to return to main menu...");
         sc.nextLine();
     }
