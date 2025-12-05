@@ -1,0 +1,81 @@
+TeamNumber,MemberID,Name,Email,Game,Role,Skill,Score,PersonalityType
+1,P085,Participant_85,user85@university.edu,Basketball,Coordinator,10,98,Leader
+1,P066,Participant_66,user66@university.edu,Chess,Strategist,1,67,Thinker
+1,P002,Participant_2,user2@university.edu,FIFA,Attacker,5,80,Balanced
+1,P081,Participant_81,user81@university.edu,FIFA,Strategist,10,52,Thinker
+1,P038,Participant_38,user38@university.edu,Valorant,Defender,1,78,Balanced
+2,P028,Participant_28,user28@university.edu,CS:GO,Defender,8,90,Leader
+2,P069,Participant_69,user69@university.edu,CS:GO,Supporter,5,68,Thinker
+2,P084,Participant_84,user84@university.edu,FIFA,Supporter,5,63,Thinker
+2,P026,Participant_26,user26@university.edu,Chess,Strategist,8,74,Balanced
+2,P029,Participant_29,user29@university.edu,Basketball,Supporter,5,77,Balanced
+3,P016,Participant_16,user16@university.edu,CS:GO,Strategist,6,90,Leader
+3,P090,Participant_90,user90@university.edu,Chess,Coordinator,5,62,Thinker
+3,P053,Participant_53,user53@university.edu,DOTA 2,Defender,7,71,Balanced
+3,P014,Participant_14,user14@university.edu,FIFA,Supporter,3,73,Balanced
+3,P063,Participant_63,user63@university.edu,Chess,Defender,8,60,Thinker
+4,P010,Participant_10,user10@university.edu,Valorant,Coordinator,5,96,Leader
+4,P036,Participant_36,user36@university.edu,Chess,Strategist,9,65,Thinker
+4,P039,Participant_39,user39@university.edu,FIFA,Supporter,5,66,Thinker
+4,P074,Participant_74,user74@university.edu,FIFA,Supporter,3,82,Balanced
+4,P005,Participant_5,user5@university.edu,CS:GO,Coordinator,9,82,Balanced
+5,P070,Participant_70,user70@university.edu,Basketball,Coordinator,1,96,Leader
+5,P051,Participant_51,user51@university.edu,FIFA,Strategist,2,57,Thinker
+5,P054,Participant_54,user54@university.edu,Valorant,Supporter,8,69,Thinker
+5,P008,Participant_8,user8@university.edu,Valorant,Defender,10,81,Balanced
+5,P041,Participant_41,user41@university.edu,Basketball,Strategist,5,70,Balanced
+6,P046,Participant_46,user46@university.edu,CS:GO,Strategist,5,96,Leader
+6,P020,Participant_20,user20@university.edu,Valorant,Coordinator,3,82,Balanced
+6,P056,Participant_56,user56@university.edu,Basketball,Strategist,4,86,Balanced
+6,P048,Participant_48,user48@university.edu,Valorant,Defender,6,65,Thinker
+6,P033,Participant_33,user33@university.edu,FIFA,Defender,7,65,Thinker
+7,P073,Participant_73,user73@university.edu,DOTA 2,Defender,8,100,Leader
+7,P065,Participant_65,user65@university.edu,DOTA 2,Coordinator,7,77,Balanced
+7,P018,Participant_18,user18@university.edu,FIFA,Defender,3,51,Thinker
+7,P017,Participant_17,user17@university.edu,CS:GO,Attacker,10,77,Balanced
+7,P006,Participant_6,user6@university.edu,CS:GO,Strategist,2,57,Thinker
+8,P022,Participant_22,user22@university.edu,Chess,Attacker,9,97,Leader
+8,P093,Participant_93,user93@university.edu,CS:GO,Defender,4,51,Thinker
+8,P003,Participant_3,user3@university.edu,FIFA,Defender,4,66,Thinker
+8,P050,Participant_50,user50@university.edu,Basketball,Coordinator,5,70,Balanced
+8,P071,Participant_71,user71@university.edu,Chess,Strategist,8,70,Balanced
+9,P055,Participant_55,user55@university.edu,Chess,Coordinator,8,90,Leader
+9,P045,Participant_45,user45@university.edu,Chess,Coordinator,2,68,Thinker
+9,P075,Participant_75,user75@university.edu,Valorant,Coordinator,8,53,Thinker
+9,P044,Participant_44,user44@university.edu,FIFA,Supporter,6,71,Balanced
+9,P032,Participant_32,user32@university.edu,DOTA 2,Attacker,2,86,Balanced
+10,P076,Participant_76,user76@university.edu,FIFA,Strategist,7,91,Leader
+10,P015,Participant_15,user15@university.edu,DOTA 2,Coordinator,8,66,Thinker
+10,P087,Participant_87,user87@university.edu,Basketball,Attacker,4,51,Thinker
+10,P068,Participant_68,user68@university.edu,Chess,Defender,1,80,Balanced
+10,P089,Participant_89,user89@university.edu,Chess,Supporter,6,75,Balanced
+11,P001,Participant_1,user1@university.edu,Chess,Strategist,2,95,Leader
+11,P030,Participant_30,user30@university.edu,CS:GO,Coordinator,4,54,Thinker
+11,P027,Participant_27,user27@university.edu,Chess,Attacker,6,53,Thinker
+11,P062,Participant_62,user62@university.edu,Basketball,Attacker,6,85,Balanced
+11,P083,Participant_83,user83@university.edu,DOTA 2,Defender,10,75,Balanced
+12,P031,Participant_31,user31@university.edu,Basketball,Strategist,8,97,Leader
+12,P009,Participant_9,user9@university.edu,CS:GO,Supporter,6,62,Thinker
+12,P023,Participant_23,user23@university.edu,CS:GO,Defender,3,87,Balanced
+12,P035,Participant_35,user35@university.edu,Basketball,Coordinator,8,78,Balanced
+12,P012,Participant_12,user12@university.edu,DOTA 2,Attacker,3,63,Thinker
+13,P025,Participant_25,user25@university.edu,FIFA,Coordinator,9,100,Leader
+13,P024,Participant_24,user24@university.edu,DOTA 2,Supporter,7,63,Thinker
+13,P072,Participant_72,user72@university.edu,DOTA 2,Attacker,5,61,Thinker
+13,P077,Participant_77,user77@university.edu,FIFA,Attacker,2,89,Balanced
+13,P095,Participant_95,user95@university.edu,CS:GO,Coordinator,2,84,Balanced
+14,P052,Participant_52,user52@university.edu,FIFA,Attacker,2,99,Leader
+14,P060,Participant_60,user60@university.edu,CS:GO,Coordinator,4,57,Thinker
+14,P092,Participant_92,user92@university.edu,Basketball,Attacker,7,70,Balanced
+14,P057,Participant_57,user57@university.edu,CS:GO,Attacker,7,54,Thinker
+14,P011,Participant_11,user11@university.edu,Basketball,Strategist,8,84,Balanced
+15,P091,Participant_91,user91@university.edu,FIFA,Strategist,10,98,Leader
+15,P096,Participant_96,user96@university.edu,DOTA 2,Strategist,8,56,Thinker
+15,P042,Participant_42,user42@university.edu,DOTA 2,Attacker,7,53,Thinker
+15,P098,Participant_98,user98@university.edu,CS:GO,Defender,5,83,Balanced
+15,P080,Participant_80,user80@university.edu,Basketball,Coordinator,1,82,Balanced
+16,P058,Participant_58,user58@university.edu,Valorant,Defender,3,95,Leader
+16,P078,Participant_78,user78@university.edu,FIFA,Defender,6,51,Thinker
+16,P021,Participant_21,user21@university.edu,FIFA,Strategist,4,64,Thinker
+16,P047,Participant_47,user47@university.edu,DOTA 2,Attacker,10,78,Balanced
+16,P059,Participant_59,user59@university.edu,DOTA 2,Supporter,4,79,Balanced
